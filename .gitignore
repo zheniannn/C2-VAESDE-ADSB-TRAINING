@@ -7,5 +7,16 @@ data/test_sequence_metadata.csv
 # Generated model outputs
 models/
 
+# Generated pipeline outputs (CSV, NPZ, etc.)
+outputs/
+!outputs/**/.gitkeep
+
+# External skills repo (cloned locally for use, not part of this project)
+SKILLS/
+
+# Python
 __pycache__/
 *.pyc
+*.egg-info/
+dist/
+build/

@@ -1,0 +1,34 @@
+# Shared experiment configuration for the VAESDE pipeline.
+# Stage-specific sweep values (N_EXAMPLES, NUM_TEST_SEQUENCES, etc.) live
+# as module-level constants in the relevant script.
+
+seq_len: 30
+n_feat: 4
+latent_dim: 16
+dt: 10.0        # seconds between ADS-B pings
+seed: 42
+features: [E_m, N_m, vE_mps, vN_mps]
+batch_size: 1024
+speed_valid_thresh: 10.0   # m/s — min speed for heading/turn-rate validity
+
+training:
+  epochs: 30
+  lr: 0.001
+  beta: 0.001
+  debug_mode: false
+  debug_train_sequences: 100000
+  debug_test_sequences: 20000
+
+# VAE detection thresholds from full-model training (stage 01 test-set quantiles)
+vae_thresholds:
+  p95: 0.036746
+  p99: 0.095424
+
+# Hand-picked kinematic thresholds used in stage 04
+kinematic_thresholds:
+  max_speed_mps: 150.0
+  max_accel_mps2: 10.0
+  max_pv_error_m: 500.0
+  mean_pv_error_m: 150.0
+  min_mean_speed_mps: 5.0
+  min_displacement_m: 100.0
