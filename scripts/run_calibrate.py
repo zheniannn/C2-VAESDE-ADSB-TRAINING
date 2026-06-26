@@ -1,7 +1,8 @@
 """Calibrate VAE + kinematic thresholds from clean-sequence quantiles.
 
 Inputs  : models/sequence_vae/sequence_vae_full.pt
-          data/X_test.npy
+          data/X_train.npy          (threshold calibration)
+          data/X_test.npy           (evaluation / stress-test)
           data/normalisation_{mean,std}.csv
           data/test_sequence_metadata.csv
 
@@ -70,6 +71,22 @@ def main() -> None:
         os.path.join(_PROJECT_ROOT, "data", "normalisation_std.csv"),
     )
 
+    # --- Calibration data: train split only ---
+    X_train_full = np.load(os.path.join(_PROJECT_ROOT, "data", "X_train.npy"), mmap_mode="r")
+    assert X_train_full.shape[1:] == (SEQ_LEN, N_FEAT)
+    n_cal        = min(NUM_TEST_SEQUENCES, len(X_train_full))
+    cal_idx      = np.sort(rng.choice(len(X_train_full), n_cal, replace=False))
+    cal_norm     = X_train_full[cal_idx].copy().astype(np.float64)
+    cal_phys     = cal_norm * std + mean
+    print(f"Calibration: sampled {n_cal:,} train sequences  (X_train: {X_train_full.shape})")
+
+    print("Computing clean kinematic quantiles on train data ...")
+    clean_kin = compute_kinematics(cal_phys)
+    thresholds, quantiles_df = calibrate_thresholds(clean_kin)
+    thresholds["vae_p95_threshold"] = P95_THR
+    thresholds["vae_p99_threshold"] = P99_THR
+
+    # --- Evaluation data: test split only ---
     X_test_full = np.load(os.path.join(_PROJECT_ROOT, "data", "X_test.npy"), mmap_mode="r")
     assert X_test_full.shape[1:] == (SEQ_LEN, N_FEAT)
     n_sample  = min(NUM_TEST_SEQUENCES, len(X_test_full))
@@ -79,15 +96,9 @@ def main() -> None:
     meta      = pd.read_csv(
         os.path.join(_PROJECT_ROOT, "data", "test_sequence_metadata.csv")
     ).iloc[idx].reset_index(drop=True)
-    print(f"Sampled {n_sample:,} sequences  (X_test: {X_test_full.shape})\n")
+    print(f"Evaluation: sampled {n_sample:,} test sequences  (X_test: {X_test_full.shape})\n")
 
-    print("Computing clean kinematic quantiles ...")
-    clean_kin = compute_kinematics(seqs_phys)
-    thresholds, quantiles_df = calibrate_thresholds(clean_kin)
-    thresholds["vae_p95_threshold"] = P95_THR
-    thresholds["vae_p99_threshold"] = P99_THR
-
-    print("\nCalibrated thresholds:")
+    print("\nCalibrated thresholds (from train data):")
     for k, v in thresholds.items():
         if not k.startswith("vae_"):
             print(f"  {k:<40} = {v:.4f}")
@@ -221,6 +232,7 @@ def main() -> None:
 
     checks = [
         ("Checkpoint exists",                        os.path.exists(_CKPT)),
+        ("X_train shape compatible (N, 30, 4)",      X_train_full.shape[1:] == (SEQ_LEN, N_FEAT)),
         ("X_test shape compatible (N, 30, 4)",       X_test_full.shape[1:] == (SEQ_LEN, N_FEAT)),
         ("Normalisation stats correct features",      True),
         ("No NaN/Inf in corrupted sequences",         True),
