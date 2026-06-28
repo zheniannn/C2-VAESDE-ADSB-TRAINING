@@ -1,0 +1,326 @@
+### C2 TRAIN ###
+=== run_train: SequenceVAE training ===
+Device : cuda  |  batch_size=1024
+Memory-mapping arrays ...
+  X_train: (1412436, 30, 4)  X_test: (160946, 30, 4)
+
+FULL: 1,412,436 train / 160,946 test
+  NaN/Inf check: OK
+  Model params: 134,040
+
+Epoch    Tr Total    Tr Recon       Tr KL    Te Total    Te Recon       Te KL    Time
+--------------------------------------------------------------------------------
+    1    0.070273    0.066119    4.153546    0.021769    0.018024    3.744585   14.8s
+    2    0.018735    0.015035    3.699980    0.017189    0.013547    3.642388   10.3s
+    3    0.017299    0.013690    3.608820    0.016985    0.013427    3.557854   11.0s
+    4    0.016855    0.013315    3.540391    0.016230    0.012718    3.511997   11.4s
+    5    0.016407    0.012925    3.482174    0.016144    0.012689    3.454975   10.0s
+    6    0.015996    0.012562    3.433917    0.016832    0.013432    3.399829    9.5s
+    7    0.015570    0.012185    3.384534    0.015178    0.011839    3.339606    9.5s
+    8    0.015213    0.011872    3.340985    0.014946    0.011613    3.333617    9.8s
+    9    0.014910    0.011606    3.304331    0.014727    0.011447    3.280059    9.7s
+   10    0.014680    0.011409    3.271522    0.014290    0.011036    3.254612   10.0s
+   11    0.014473    0.011231    3.242125    0.014273    0.011044    3.229672    9.7s
+   12    0.014323    0.011107    3.215968    0.014043    0.010856    3.186943    9.8s
+   13    0.014180    0.010988    3.191691    0.013994    0.010794    3.199800   10.4s
+   14    0.014050    0.010882    3.168010    0.013920    0.010781    3.138702   10.2s
+   15    0.013934    0.010787    3.147252    0.013675    0.010538    3.136956   10.8s
+   16    0.013826    0.010698    3.127641    0.013656    0.010534    3.121910   10.2s
+   17    0.013733    0.010625    3.108065    0.013446    0.010351    3.094355    9.5s
+   18    0.013648    0.010558    3.090035    0.013398    0.010318    3.079865   10.9s
+   19    0.013567    0.010494    3.072970    0.013283    0.010213    3.070061   11.0s
+   20    0.013494    0.010436    3.057342    0.013414    0.010375    3.038876   11.5s
+   21    0.013411    0.010368    3.042622    0.013261    0.010222    3.038767   10.5s
+   22    0.013350    0.010320    3.029228    0.013210    0.010211    2.999085   10.2s
+   23    0.013289    0.010272    3.016490    0.013179    0.010167    3.011263   10.1s
+   24    0.013227    0.010223    3.003942    0.013173    0.010176    2.996535    9.9s
+   25    0.013180    0.010187    2.992888    0.012996    0.009999    2.996713   11.5s
+   26    0.013120    0.010137    2.982468    0.012991    0.010005    2.986134   10.0s
+   27    0.013081    0.010109    2.971722    0.012865    0.009897    2.968319   11.8s
+   28    0.013034    0.010071    2.963003    0.013009    0.010075    2.933910   10.8s
+   29    0.012993    0.010039    2.953736    0.012847    0.009886    2.961478   11.1s
+   30    0.012955    0.010009    2.945437    0.013031    0.010112    2.919521   10.0s
+
+Total training time: 316.0s
+
+Checkpoint saved: /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/train/sequence_vae_full.pt
+
+==============================================================
+TRAINING COMPLETE
+==============================================================
+  Device used                   : cuda
+  Debug mode                    : False
+  Final train total loss        : 0.012955
+  Final train recon loss        : 0.010009
+  Final train KL loss           : 2.945437
+  Final test  total loss        : 0.013031
+  Final test  recon loss        : 0.010112
+  Final test  KL loss           : 2.919521
+
+  Recon MSE (test) p50          : 0.003687
+  Recon MSE (test) p90          : 0.023217
+  Recon MSE (test) p95          : 0.039481
+  Recon MSE (test) p99          : 0.104046
+
+Sanity checks:
+  [PASS] X_train shape (N, 30, 4)
+  [PASS] X_test  shape (N, 30, 4)
+  [PASS] No NaN/Inf in sampled train batch
+  [PASS] Model output shape == input shape
+  [PASS] Loss decreased over training
+  [PASS] reconstruction_error_summary written
+  [PASS] Checkpoint written
+
+Outputs written to /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/train
+### COPY CKPT ###
+total 1600
+drwxr-xr-x 2 ian ian    4096 Jun 27 19:46 .
+drwxr-xr-x 3 ian ian    4096 Jun 27 19:41 ..
+-rw-r--r-- 1 ian ian 1626343 Jun 27 19:46 sequence_vae_full.pt
+### C2 STRESS TEST ###
+=== run_stress_test: SequenceVAE stress test ===
+Device: cuda
+Loaded model from /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/models/sequence_vae/sequence_vae_full.pt
+X_test: (160946, 30, 4)
+Sampled 50,000 sequences
+NaN/Inf check: OK
+
+  Test type                         mean       p50       p95   >p95%   >p99%
+  --------------------------------------------------------------------
+  clean                          0.01007   0.00365   0.03939    5.5%    1.2%
+  speed_scaled_1p5               0.02237   0.00765   0.09016   15.1%    4.7%
+  speed_scaled_2p0               0.04104   0.01446   0.16516   27.1%   10.1%
+  position_jump_1000m            0.01009   0.00367   0.03944    5.5%    1.2%
+  position_jump_2000m            0.01018   0.00378   0.03961    5.5%    1.2%
+  random_walk_velocity           0.12540   0.12113   0.17985  100.0%   85.4%
+  sudden_turn_90deg              0.02193   0.01652   0.05525   11.9%    1.7%
+  stationary_clutter_like        0.00059   0.00051   0.00114    0.0%    0.0%
+
+========================================================================
+STRESS TEST REPORT
+========================================================================
+  Device                  : cuda
+  Test sequences sampled  : 50,000
+  p95 threshold           : 0.036746
+  p99 threshold           : 0.095424
+
+  Test type                      mean MSE       p50       p95   >p95 %   >p99 %
+  ------------------------------------------------------------------------
+  clean                           0.01007   0.00365   0.03939     5.5%     1.2%
+  speed_scaled_1p5                0.02237   0.00765   0.09016    15.1%     4.7%
+  speed_scaled_2p0                0.04104   0.01446   0.16516    27.1%    10.1%
+  position_jump_1000m             0.01009   0.00367   0.03944     5.5%     1.2%
+  position_jump_2000m             0.01018   0.00378   0.03961     5.5%     1.2%
+  random_walk_velocity            0.12540   0.12113   0.17985   100.0%    85.4%
+  sudden_turn_90deg               0.02193   0.01652   0.05525    11.9%     1.7%
+  stationary_clutter_like         0.00059   0.00051   0.00114     0.0%     0.0%
+
+Interpretation:
+  speed_scaled_1p5               2.2x clean   15.1% >p95  →  partially detected (10–40% above p95)
+  speed_scaled_2p0               4.1x clean   27.1% >p95  →  partially detected (10–40% above p95)
+  position_jump_1000m            1.0x clean    5.5% >p95  →  not well detected  (<10% above p95)
+  position_jump_2000m            1.0x clean    5.5% >p95  →  not well detected  (<10% above p95)
+  random_walk_velocity          12.5x clean  100.0% >p95  →  caught strongly    (>80% above p95)
+  sudden_turn_90deg              2.2x clean   11.9% >p95  →  partially detected (10–40% above p95)
+  stationary_clutter_like        0.1x clean    0.0% >p95  →  not well detected  (<10% above p95)
+
+Sanity checks:
+  [PASS] Checkpoint exists
+  [PASS] X_test shape (N, 30, 4)
+  [PASS] Normalisation stats have correct features
+  [PASS] No NaN/Inf in corrupted sequences
+  [PASS] VAE output shape matches input
+  [PASS] Clean >p95 ~5% (got 5.5%)
+  [PASS] All output files written
+
+Files written:
+  /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/stress_test/stress_test_summary.csv  (0.0 MB)
+  /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/stress_test/stress_test_per_sequence_errors.csv  (30.4 MB)
+  /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/stress_test/stress_test_examples.npz  (0.1 MB)
+
+Outputs written to /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/stress_test
+### C2 CALIBRATE ###
+=== run_calibrate: threshold calibration ===
+Device: cuda
+Loaded: /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/models/sequence_vae/sequence_vae_full.pt
+Sampled 50,000 sequences  (X_test: (160946, 30, 4))
+
+Computing clean kinematic quantiles ...
+
+Calibrated thresholds:
+  max_speed_threshold_mps                  = 150.0000
+  max_accel_threshold_mps2                 = 5.7712
+  mean_pv_error_threshold_m                = 224.8336
+  max_pv_error_threshold_m                 = 1955.3542
+  mean_turn_rate_threshold_degps           = 4.3696
+  max_turn_rate_threshold_degps            = 15.1408
+  min_mean_speed_threshold_mps             = 1.0000
+  min_displacement_threshold_m             = 50.0000
+
+NaN/Inf check: OK
+
+  Test type                      VAE p95     Kin   Comb p95
+  ----------------------------------------------------------
+  clean                             5.5%    5.5%       9.9%
+  speed_scaled_1p5                 15.1%   14.5%      22.5%
+  speed_scaled_2p0                 27.1%   44.1%      49.8%
+  position_jump_1000m               5.5%    5.8%       9.8%
+  position_jump_2000m               5.5%   92.5%      93.2%
+  random_walk_velocity            100.0%   47.4%     100.0%
+  sudden_turn_90deg                11.9%   13.2%      21.5%
+  stationary_clutter_like           0.0%  100.0%     100.0%
+
+Calibration impact vs previous hand-picked thresholds:
+  Clean kinematic flag rate : 18.7%  →  5.5%
+  Clean combined p95 rate   : 20.6%  →  9.9%
+  sudden_turn_90deg combined: 15.3%  →  21.5%  (improved)
+
+==============================================================================
+CALIBRATED MOTION PRIOR REPORT
+==============================================================================
+  Device                    : cuda
+  Test sequences sampled    : 50,000
+
+Calibrated thresholds:
+  max_speed_threshold_mps                       150.000
+  max_accel_threshold_mps2                        5.771
+  mean_pv_error_threshold_m                     224.834
+  max_pv_error_threshold_m                     1955.354
+  mean_turn_rate_threshold_degps                  4.370
+  max_turn_rate_threshold_degps                  15.141
+  min_mean_speed_threshold_mps                    1.000
+  min_displacement_threshold_m                   50.000
+  vae_p95_threshold                               0.037
+  vae_p99_threshold                               0.095
+
+  Test type                      VAE p95   VAE p99    Kinem   Comb p95   Comb p99
+  -------------------------------------------------------------------------------
+  clean                             5.5%      1.2%     5.5%       9.9%       6.2%
+  speed_scaled_1p5                 15.1%      4.7%    14.5%      22.5%      15.7%
+  speed_scaled_2p0                 27.1%     10.2%    44.1%      49.8%      44.4%
+  position_jump_1000m               5.5%      1.2%     5.8%       9.8%       6.4%
+  position_jump_2000m               5.5%      1.2%    92.5%      93.2%      92.6%
+  random_walk_velocity            100.0%     85.3%    47.4%     100.0%      89.2%
+  sudden_turn_90deg                11.9%      1.7%    13.2%      21.5%      14.1%
+  stationary_clutter_like           0.0%      0.0%   100.0%     100.0%     100.0%
+
+Kinematic flag breakdown (calibrated):
+  Test type                          speed       accel      pv_max     pv_mean    turn_max   turn_mean    too_slow  low_displacement
+  ----------------------------------------------------------------------------------------------------------------------------------
+  clean                               0.0%        0.5%        0.5%        0.5%        0.5%        0.5%        3.3%        3.3%
+  speed_scaled_1p5                    3.3%        8.1%        0.0%        0.0%        0.6%        0.6%        3.2%        2.9%
+  speed_scaled_2p0                   25.9%       22.5%        0.0%        0.0%        0.7%        0.6%        3.1%        2.9%
+  position_jump_1000m                 0.0%        0.5%        0.5%        1.2%        0.5%        0.5%        3.3%        0.0%
+  position_jump_2000m                 0.0%        0.5%       91.7%        2.9%        0.5%        0.5%        3.3%        0.0%
+  random_walk_velocity                0.9%       31.4%        0.0%        0.0%       21.4%       20.5%        0.0%        0.0%
+  sudden_turn_90deg                   0.0%        8.6%        0.0%        0.0%        0.9%        0.6%        3.3%        2.9%
+  stationary_clutter_like             0.0%        0.0%        0.0%        0.0%        0.0%        0.0%      100.0%      100.0%
+
+Interpretation:
+  speed_scaled_1p5              VAE=15%  Kin=15%  Comb=23%  [accel]  → partial both
+  speed_scaled_2p0              VAE=27%  Kin=44%  Comb=50%  [speed, accel]  → combined >> VAE
+  position_jump_1000m           VAE=6%  Kin=6%  Comb=10%  [none]  → partial both
+  position_jump_2000m           VAE=6%  Kin=93%  Comb=93%  [pv_max]  → combined >> VAE
+  random_walk_velocity          VAE=100%  Kin=47%  Comb=100%  [accel, turn_max, turn_mean]  → VAE dominant
+  sudden_turn_90deg             VAE=12%  Kin=13%  Comb=22%  [accel]  → partial both
+  stationary_clutter_like       VAE=0%  Kin=100%  Comb=100%  [too_slow, low_displacement]  → combined >> VAE
+
+Sanity checks:
+  [PASS] Checkpoint exists
+  [PASS] X_test shape compatible (N, 30, 4)
+  [PASS] Normalisation stats correct features
+  [PASS] No NaN/Inf in corrupted sequences
+  [PASS] VAE output shape matches input
+  [PASS] Clean VAE p95 ~5%  (got 5.5%)
+  [PASS] Clean VAE p99 ~1%  (got 1.2%)
+  [PASS] Clean kinematic flag < 10%  (got 5.5%)
+  [FAIL] Position jumps pv_max >= 80%  (got 0.5%)
+  [PASS] Stationary lower-tail >= 80%  (got 100.0%)
+  [PASS] sudden_turn combined > 0%  (got 21.5%)
+  [PASS] All output files written
+
+Files written:
+  /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/calibrate/calibrated_thresholds.csv  (0.0 MB)
+  /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/calibrate/clean_kinematic_quantiles.csv  (0.0 MB)
+  /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/calibrate/calibrated_motion_prior_summary.csv  (0.0 MB)
+  /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/calibrate/calibrated_motion_prior_per_sequence_scores.csv  (117.5 MB)
+  /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/calibrate/calibrated_motion_prior_examples.npz  (0.1 MB)
+
+Outputs written to /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/calibrate
+### C2 SCORE ###
+=== run_score: motion-prior scorer ===
+Device: cuda
+Loaded model from /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/models/sequence_vae/sequence_vae_full.pt
+X_test: (160946, 30, 4)
+Sampled 50,000 sequences
+
+NaN/Inf check: OK
+
+  [clean                       ]  VAE_p95=  5.5%  Kin= 18.7%  Comb_p95= 20.8%
+  [speed_scaled_1p5            ]  VAE_p95= 15.1%  Kin=  7.8%  Comb_p95= 22.2%
+  [speed_scaled_2p0            ]  VAE_p95= 27.1%  Kin= 30.7%  Comb_p95= 47.5%
+  [position_jump_1000m         ]  VAE_p95=  5.5%  Kin=100.0%  Comb_p95=100.0%
+  [position_jump_2000m         ]  VAE_p95=  5.5%  Kin=100.0%  Comb_p95=100.0%
+  [random_walk_velocity        ]  VAE_p95=100.0%  Kin=  1.7%  Comb_p95=100.0%
+  [sudden_turn_90deg           ]  VAE_p95= 11.9%  Kin=  5.2%  Comb_p95= 17.1%
+  [stationary_clutter_like     ]  VAE_p95=  0.0%  Kin=100.0%  Comb_p95=100.0%
+
+==============================================================================
+MOTION PRIOR SCORER REPORT
+==============================================================================
+  Device                    : cuda
+  Test sequences sampled    : 50,000
+  VAE p95 threshold         : 0.036746
+  VAE p99 threshold         : 0.095424
+
+  Test type                      VAE p95   VAE p99    Kinem   Comb p95   Comb p99
+  -------------------------------------------------------------------------------
+  clean                             5.5%      1.2%    18.7%      20.8%      18.9%
+  speed_scaled_1p5                 15.1%      4.7%     7.8%      22.2%      12.3%
+  speed_scaled_2p0                 27.1%     10.2%    30.7%      47.5%      36.6%
+  position_jump_1000m               5.5%      1.2%   100.0%     100.0%     100.0%
+  position_jump_2000m               5.5%      1.2%   100.0%     100.0%     100.0%
+  random_walk_velocity            100.0%     85.3%     1.7%     100.0%      85.4%
+  sudden_turn_90deg                11.9%      1.7%     5.2%      17.1%       6.9%
+  stationary_clutter_like           0.0%      0.0%   100.0%     100.0%     100.0%
+
+Kinematic flag breakdown:
+  Test type                            speed         accel        pv_max       pv_mean      too_slow  low_displacement
+  --------------------------------------------------------------------------------------------------------------------
+  clean                                 0.0%          0.0%         12.4%          3.8%          5.2%          3.4%
+  speed_scaled_1p5                      3.3%          0.1%          0.0%          0.0%          4.4%          3.0%
+  speed_scaled_2p0                     25.9%          1.6%          0.0%          0.0%          4.0%          3.0%
+  position_jump_1000m                   0.0%          0.0%        100.0%          7.8%          5.2%          0.0%
+  position_jump_2000m                   0.0%          0.0%        100.0%         16.9%          5.2%          0.0%
+  random_walk_velocity                  0.9%          0.8%          0.0%          0.0%          0.0%          0.0%
+  sudden_turn_90deg                     0.0%          0.0%          0.0%          0.0%          5.2%          3.0%
+  stationary_clutter_like               0.0%          0.0%          0.0%          0.0%        100.0%        100.0%
+
+Interpretation:
+  speed_scaled_1p5              VAE++10%  Kin=8%  Comb=22%  flags=[none]  → combined adds value
+  speed_scaled_2p0              VAE++22%  Kin=31%  Comb=48%  flags=[speed]  → combined adds value
+  position_jump_1000m           VAE+-0%  Kin=100%  Comb=100%  flags=[pv_max]  → combined adds value
+  position_jump_2000m           VAE+-0%  Kin=100%  Comb=100%  flags=[pv_max, pv_mean]  → combined adds value
+  random_walk_velocity          VAE++94%  Kin=2%  Comb=100%  flags=[none]  → VAE alone sufficient
+  sudden_turn_90deg             VAE++6%  Kin=5%  Comb=17%  flags=[none]  → combined adds value
+  stationary_clutter_like       VAE+-6%  Kin=100%  Comb=100%  flags=[too_slow, low_displacement]  → combined adds value
+
+Sanity checks:
+  [PASS] Checkpoint exists
+  [PASS] X_test shape compatible (N, 30, 4)
+  [PASS] Normalisation stats correct features
+  [PASS] No NaN/Inf in corrupted sequences
+  [PASS] VAE output shape matches input
+  [PASS] Clean VAE p95 ~5%  (got 5.5%)
+  [PASS] Clean VAE p99 ~1%  (got 1.2%)
+  [PASS] Position jumps caught by pv_max  (got 100.0%)
+  [PASS] Stationary caught by speed/displacement  (got 100.0%)
+  [PASS] All output files written
+
+Files written:
+  /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/score/motion_prior_summary.csv  (0.0 MB)
+  /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/score/motion_prior_per_sequence_scores.csv  (99.2 MB)
+  /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/score/motion_prior_examples.npz  (0.1 MB)
+
+Outputs written to /home/ian/working/TRIAL/C2-VAESDE-ADSB-TRAINING/outputs/score
+### C2 CHAIN COMPLETE ###
